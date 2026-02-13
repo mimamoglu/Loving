@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block head %}<title>Upload - Loving</title>{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Upload Memories</h1>
+        <p>Add new photos & videos to our collection</p>
+    </div>
+
+    <div class="upload-card">
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            <!-- Drop zone -->
+            <div class="drop-zone" id="dropZone">
+                <div class="drop-icon">📸</div>
+                <p>Drag & drop photos/videos here</p>
+                <p class="drop-hint">or click to browse</p>
+                <input type="file" name="files" id="fileInput" multiple accept="image/*,video/*" hidden>
+            </div>
+            <div class="file-preview" id="filePreview"></div>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label>Title (optional - defaults to filename)</label>
+                    <input type="text" name="title" placeholder="Our sunset picnic...">
+                </div>
+                <div class="form-row">
+                    <label>Caption</label>
+                    <input type="text" name="caption" placeholder="A short description...">
+                </div>
+                <div class="form-row">
+                    <label>Date of Memory</label>
+                    <input type="date" name="memory_date">
+                </div>
+                <div class="form-row">
+                    <label>Album</label>
+                    <select name="category_id" id="categorySelect">
+                        <option value="">-- Select Album --</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.emoji }} {{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" class="btn-small" onclick="showNewCategory()">+ New Album</button>
+                </div>
+                <div class="form-row" id="newCategoryRow" style="display:none">
+                    <label>New Album Name</label>
+                    <div class="inline-form">
+                        <input type="text" id="newCatName" placeholder="Album name">
+                        <input type="text" id="newCatEmoji" placeholder="Emoji" maxlength="4" style="width:60px">
+                        <button type="button" class="btn-small" onclick="addCategory()">Add</button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>Uploaded by</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="uploaded_by" value="{{ partner1 }}">
+                            <span>{{ partner1 }}</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="uploaded_by" value="{{ partner2 }}">
+                            <span>{{ partner2 }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-progress" id="uploadProgress" style="display:none">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <span id="progressText">Uploading...</span>
+            </div>
+
+            <button type="submit" class="btn-primary btn-large">Upload Memories</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const preview = document.getElementById('filePreview');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+    showPreview(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', () => showPreview(fileInput.files));
+
+function showPreview(files) {
+    preview.innerHTML = '';
+    Array.from(files).forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        if (f.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(f);
+            div.appendChild(img);
+        } else {
+            div.innerHTML = '<div class="preview-video">🎬</div>';
+        }
+        const name = document.createElement('span');
+        name.textContent = f.name.length > 20 ? f.name.slice(0, 17) + '...' : f.name;
+        div.appendChild(name);
+        preview.appendChild(div);
+    });
+}
+
+function showNewCategory() {
+    document.getElementById('newCategoryRow').style.display = 'block';
+}
+
+function addCategory() {
+    const name = document.getElementById('newCatName').value.trim();
+    const emoji = document.getElementById('newCatEmoji').value.trim() || '💕';
+    if (!name) return;
+
+    fetch('/api/categories', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, emoji})
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.id) {
+            const sel = document.getElementById('categorySelect');
+            const opt = new Option(emoji + ' ' + name, data.id);
+            sel.add(opt);
+            sel.value = data.id;
+            document.getElementById('newCategoryRow').style.display = 'none';
+            document.getElementById('newCatName').value = '';
+            document.getElementById('newCatEmoji').value = '';
+        }
+    });
+}
+
+// Upload progress
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    if (!fileInput.files.length) return;
+    e.preventDefault();
+    const formData = new FormData(this);
+    const xhr = new XMLHttpRequest();
+    const progressDiv = document.getElementById('uploadProgress');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+
+    progressDiv.style.display = 'block';
+
+    xhr.upload.addEventListener('progress', e => {
+        if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            progressFill.style.width = pct + '%';
+            progressText.textContent = `Uploading... ${pct}%`;
+        }
+    });
+
+    xhr.addEventListener('load', () => {
+        window.location.href = '/timeline';
+    });
+
+    xhr.open('POST', '/upload');
+    xhr.send(formData);
+});
+</script>
+{% endblock %}

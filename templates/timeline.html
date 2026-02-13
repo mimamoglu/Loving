@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block head %}<title>Our Timeline - Loving</title>{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Our Timeline</h1>
+        <p>Every moment we've shared</p>
+    </div>
+
+    {% if memories %}
+    <div class="timeline">
+        {% set ns = namespace(current_month='') %}
+        {% for memory in memories %}
+            {% if memory.memory_date %}
+                {% set month_key = memory.memory_date[:7] %}
+            {% else %}
+                {% set month_key = 'undated' %}
+            {% endif %}
+
+            {% if month_key != ns.current_month %}
+                {% set ns.current_month = month_key %}
+                <div class="timeline-month">
+                    {% if month_key == 'undated' %}
+                        Undated Memories
+                    {% else %}
+                        {{ memory.memory_date|datefmt }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="timeline-item {% if loop.index is odd %}left{% else %}right{% endif %}" data-id="{{ memory.id }}">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    {% if memory.media_type == 'image' %}
+                        {% if memory.thumbnail %}
+                        <img src="{{ url_for('static', filename='uploads/thumbnails/' + memory.thumbnail) }}"
+                             data-full="{{ url_for('static', filename='uploads/' + memory.filename) }}"
+                             alt="{{ memory.title }}"
+                             class="timeline-media clickable-media"
+                             loading="lazy">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + memory.filename) }}"
+                             alt="{{ memory.title }}"
+                             class="timeline-media clickable-media"
+                             loading="lazy">
+                        {% endif %}
+                    {% else %}
+                        <video class="timeline-media" controls preload="metadata">
+                            <source src="{{ url_for('static', filename='uploads/' + memory.filename) }}">
+                        </video>
+                    {% endif %}
+                    <div class="timeline-info">
+                        <h3>{{ memory.title }}</h3>
+                        {% if memory.caption %}<p>{{ memory.caption }}</p>{% endif %}
+                        <div class="timeline-meta">
+                            {% if memory.category_emoji %}
+                                <span class="badge">{{ memory.category_emoji }} {{ memory.category_name }}</span>
+                            {% endif %}
+                            {% if memory.memory_date %}
+                                <span class="date">{{ memory.memory_date|datefmt }}</span>
+                            {% endif %}
+                        </div>
+                        <form method="POST" action="{{ url_for('delete_memory', memory_id=memory.id) }}"
+                              class="delete-form" onsubmit="return confirm('Delete this memory?')">
+                            <button type="submit" class="btn-delete" title="Delete">&#10005;</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📸</div>
+        <h2>No memories yet</h2>
+        <p>Start uploading your photos and videos!</p>
+        <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Upload First Memory</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.clickable-media').forEach(img => {
+    img.addEventListener('click', () => {
+        const src = img.dataset.full || img.src;
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    });
+});
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// Scroll animation
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+</script>
+{% endblock %}

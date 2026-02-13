@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block head %}<title>Loving - Enter</title>{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="floating-hearts" id="floatingHearts"></div>
+    <div class="login-card">
+        <div class="login-heart">&#10084;</div>
+        <h1>Loving</h1>
+        <p class="login-subtitle">Our private little world</p>
+        <form method="POST">
+            <input type="password" name="password" placeholder="Enter our secret..." autofocus required>
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Floating hearts animation
+const container = document.getElementById('floatingHearts');
+const hearts = ['❤', '💕', '💖', '💗', '💘', '💝'];
+function spawnHeart() {
+    const heart = document.createElement('span');
+    heart.className = 'float-heart';
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.fontSize = (Math.random() * 20 + 14) + 'px';
+    heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+    heart.style.opacity = Math.random() * 0.5 + 0.3;
+    container.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+}
+setInterval(spawnHeart, 600);
+for (let i = 0; i < 8; i++) setTimeout(spawnHeart, i * 200);
+</script>
+{% endblock %}

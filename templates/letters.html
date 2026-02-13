@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block head %}<title>Love Letters - Loving</title>{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Love Letters</h1>
+        <p>Words from the heart</p>
+    </div>
+
+    <!-- Write new letter -->
+    <div class="letter-form-card">
+        <h2>Write a Letter</h2>
+        <form method="POST" action="{{ url_for('new_letter') }}">
+            <div class="form-row">
+                <label>From:</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="author" value="{{ partner1 }}" required>
+                        <span>{{ partner1 }}</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="author" value="{{ partner2 }}">
+                        <span>{{ partner2 }}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-row">
+                <input type="text" name="title" placeholder="Subject (e.g. 'Why I love you')" required>
+            </div>
+            <div class="form-row">
+                <textarea name="content" rows="6" placeholder="Write your heart out..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Send Letter</button>
+        </form>
+    </div>
+
+    <!-- Letters list -->
+    {% if letters %}
+    <div class="letters-list">
+        {% for letter in letters %}
+        <div class="letter-card">
+            <div class="letter-envelope"></div>
+            <div class="letter-header">
+                <span class="letter-author">From: {{ letter.author }}</span>
+                <span class="letter-date">{{ letter.created_at[:10]|datefmt }}</span>
+            </div>
+            <h3 class="letter-title">{{ letter.title }}</h3>
+            <div class="letter-content">{{ letter.content|replace('\n', '<br>')|safe }}</div>
+            <form method="POST" action="{{ url_for('delete_letter', letter_id=letter.id) }}"
+                  class="delete-form" onsubmit="return confirm('Delete this letter?')">
+                <button type="submit" class="btn-delete" title="Delete">&#10005;</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">💌</div>
+        <h2>No letters yet</h2>
+        <p>Write the first love letter above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

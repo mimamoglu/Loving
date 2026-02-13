@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block head %}<title>{{ partner1 }} & {{ partner2 }}</title>{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div class="landing-content">
+        <div class="landing-names">
+            <span class="name name-1">{{ partner1 }}</span>
+            <span class="name-ampersand">&</span>
+            <span class="name name-2">{{ partner2 }}</span>
+        </div>
+
+        <div class="landing-counter">
+            <div class="counter-number" id="daysCounter">{{ days_together }}</div>
+            <div class="counter-label">days in love</div>
+            <div class="counter-since">since {{ start_date }}</div>
+        </div>
+
+        {% if featured %}
+        <div class="landing-featured">
+            <img src="{{ url_for('static', filename='uploads/' + featured.filename) }}" alt="Our memory">
+        </div>
+        {% endif %}
+
+        <div class="landing-stats">
+            <div class="stat">
+                <div class="stat-number">{{ memory_count }}</div>
+                <div class="stat-label">Memories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">{{ letter_count }}</div>
+                <div class="stat-label">Love Letters</div>
+            </div>
+        </div>
+
+        <div class="landing-nav">
+            <a href="{{ url_for('timeline') }}" class="landing-btn">Our Timeline</a>
+            <a href="{{ url_for('albums') }}" class="landing-btn">Albums</a>
+            <a href="{{ url_for('letters') }}" class="landing-btn">Love Letters</a>
+            <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Upload Memory</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const container = document.getElementById('floatingHearts');
+const hearts = ['❤', '💕', '💖', '💗', '💘', '💝'];
+function spawnHeart() {
+    const heart = document.createElement('span');
+    heart.className = 'float-heart';
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.fontSize = (Math.random() * 20 + 14) + 'px';
+    heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+    heart.style.opacity = Math.random() * 0.5 + 0.3;
+    container.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+}
+setInterval(spawnHeart, 800);
+for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 300);
+</script>
+{% endblock %}
