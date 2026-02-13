@@ -33,6 +33,20 @@ fi
 echo ""
 echo "[1/6] Installing system dependencies..."
 yum install -y epel-release
+
+# Add official nginx repo for CentOS 7
+if [ ! -f /etc/yum.repos.d/nginx.repo ]; then
+    cat > /etc/yum.repos.d/nginx.repo << 'REPOEOF'
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+REPOEOF
+fi
+
 yum install -y python3 python3-pip python3-devel gcc nginx
 
 # ---- Step 2: Create app user ----
@@ -48,7 +62,7 @@ echo "[3/6] Installing Python dependencies..."
 cd "$APP_DIR"
 pip3 install --upgrade pip
 pip3 install -r requirements.txt
-pip3 install gunicorn
+pip3 install 'gunicorn==20.1.0'
 
 # ---- Step 4: Initialize database ----
 echo ""
