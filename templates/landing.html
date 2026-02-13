@@ -14,8 +14,8 @@
 
         <div class="landing-counter">
             <div class="counter-number" id="daysCounter">{{ days_together }}</div>
-            <div class="counter-label">days in love</div>
-            <div class="counter-since">since {{ start_date }}</div>
+            <div class="counter-label">gündür aşkla</div>
+            <div class="counter-since">{{ start_date }}'den beri</div>
         </div>
 
         {% if featured %}
@@ -27,19 +27,19 @@
         <div class="landing-stats">
             <div class="stat">
                 <div class="stat-number">{{ memory_count }}</div>
-                <div class="stat-label">Memories</div>
+                <div class="stat-label">Anı</div>
             </div>
             <div class="stat">
                 <div class="stat-number">{{ letter_count }}</div>
-                <div class="stat-label">Love Letters</div>
+                <div class="stat-label">Aşk Mektubu</div>
             </div>
         </div>
 
         <div class="landing-nav">
-            <a href="{{ url_for('timeline') }}" class="landing-btn">Our Timeline</a>
-            <a href="{{ url_for('albums') }}" class="landing-btn">Albums</a>
-            <a href="{{ url_for('letters') }}" class="landing-btn">Love Letters</a>
-            <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Upload Memory</a>
+            <a href="{{ url_for('timeline') }}" class="landing-btn">Zaman Tüneli</a>
+            <a href="{{ url_for('albums') }}" class="landing-btn">Albümler</a>
+            <a href="{{ url_for('letters') }}" class="landing-btn">Aşk Mektupları</a>
+            <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Anı Yükle</a>
         </div>
     </div>
 </div>

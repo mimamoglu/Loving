@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block head %}<title>Albums - Loving</title>{% endblock %}
+{% block head %}<title>Albümler - Loving</title>{% endblock %}
 
 {% block content %}
 <div class="page-container">
     <div class="page-header">
-        <h1>{% if active_category %}{{ active_category.emoji }} {{ active_category.name }}{% else %}Albums{% endif %}</h1>
-        <p>{% if active_category %}{{ memories|length }} memories{% else %}Browse by category{% endif %}</p>
+        <h1>{% if active_category %}{{ active_category.emoji }} {{ active_category.name }}{% else %}Albümler{% endif %}</h1>
+        <p>{% if active_category %}{{ memories|length }} anı{% else %}Kategoriye göre göz at{% endif %}</p>
         {% if active_category %}
-            <a href="{{ url_for('albums') }}" class="back-link">&larr; All Albums</a>
+            <a href="{{ url_for('albums') }}" class="back-link">&larr; Tüm Albümler</a>
         {% endif %}
     </div>
 
@@ -18,7 +18,7 @@
         <a href="{{ url_for('albums', category_id=cat.id) }}" class="album-card">
             <div class="album-emoji">{{ cat.emoji }}</div>
             <div class="album-name">{{ cat.name }}</div>
-            <div class="album-count">{{ cat.count }} memories</div>
+            <div class="album-count">{{ cat.count }} anı</div>
         </a>
         {% endfor %}
     </div>
@@ -51,8 +51,8 @@
                 {% if memory.memory_date %}<span class="date">{{ memory.memory_date|datefmt }}</span>{% endif %}
             </div>
             <form method="POST" action="{{ url_for('delete_memory', memory_id=memory.id) }}"
-                  class="delete-form" onsubmit="return confirm('Delete this memory?')">
-                <button type="submit" class="btn-delete" title="Delete">&#10005;</button>
+                  class="delete-form" onsubmit="return confirm('Bu anıyı silmek istediğine emin misin?')">
+                <button type="submit" class="btn-delete" title="Sil">&#10005;</button>
             </form>
         </div>
         {% endfor %}
@@ -60,9 +60,9 @@
     {% else %}
     <div class="empty-state">
         <div class="empty-icon">{{ active_category.emoji }}</div>
-        <h2>No memories in this album</h2>
-        <p>Upload some to fill it up!</p>
-        <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Upload</a>
+        <h2>Bu albümde henüz anı yok</h2>
+        <p>Doldurmak için birkaç anı yükle!</p>
+        <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Yükle</a>
     </div>
     {% endif %}
     {% endif %}

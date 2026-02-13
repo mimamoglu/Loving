@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +15,11 @@
     <nav class="navbar">
         <a href="{{ url_for('landing') }}" class="nav-logo">Loving</a>
         <div class="nav-links">
-            <a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a>
-            <a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a>
-            <a href="{{ url_for('letters') }}" class="{% if request.endpoint == 'letters' %}active{% endif %}">Letters</a>
-            <a href="{{ url_for('upload') }}" class="nav-upload {% if request.endpoint == 'upload' %}active{% endif %}">+ Upload</a>
-            <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+            <a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Zaman Tüneli</a>
+            <a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albümler</a>
+            <a href="{{ url_for('letters') }}" class="{% if request.endpoint == 'letters' %}active{% endif %}">Mektuplar</a>
+            <a href="{{ url_for('upload') }}" class="nav-upload {% if request.endpoint == 'upload' %}active{% endif %}">+ Yükle</a>
+            <a href="{{ url_for('logout') }}" class="nav-logout">Çıkış</a>
         </div>
         <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
             <span></span><span></span><span></span>

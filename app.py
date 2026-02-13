@@ -48,7 +48,7 @@ def login():
             session["logged_in"] = True
             session.permanent = True
             return redirect(url_for("landing"))
-        flash("Wrong password, try again 💔")
+        flash("Yanlış şifre, tekrar dene 💔")
     return render_template("login.html")
 
 
@@ -159,7 +159,7 @@ def new_letter():
     content = request.form.get("content", "").strip()
 
     if not all([author, title, content]):
-        flash("Please fill in all fields.")
+        flash("Lütfen tüm alanları doldur.")
         return redirect(url_for("letters"))
 
     db = get_db()
@@ -169,7 +169,7 @@ def new_letter():
     )
     db.commit()
     db.close()
-    flash("Letter sent with love! 💌")
+    flash("Mektup sevgiyle gönderildi! 💌")
     return redirect(url_for("letters"))
 
 
@@ -180,7 +180,7 @@ def delete_letter(letter_id):
     db.execute("DELETE FROM letters WHERE id = ?", (letter_id,))
     db.commit()
     db.close()
-    flash("Letter deleted.")
+    flash("Mektup silindi.")
     return redirect(url_for("letters"))
 
 
@@ -201,7 +201,7 @@ def upload():
         uploaded_by = request.form.get("uploaded_by", "").strip()
 
         if not files or not files[0].filename:
-            flash("Please select at least one file.")
+            flash("Lütfen en az bir dosya seç.")
             return redirect(url_for("upload"))
 
         saved = 0
@@ -234,7 +234,7 @@ def upload():
 
         db.commit()
         db.close()
-        flash(f"{saved} memory(ies) uploaded! 🎉")
+        flash(f"{saved} anı yüklendi! 🎉")
         return redirect(url_for("timeline"))
 
     db.close()
@@ -263,7 +263,7 @@ def delete_memory(memory_id):
         db.execute("DELETE FROM memories WHERE id = ?", (memory_id,))
         db.commit()
     db.close()
-    flash("Memory deleted.")
+    flash("Anı silindi.")
     return redirect(request.referrer or url_for("timeline"))
 
 

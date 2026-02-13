@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block head %}<title>Upload - Loving</title>{% endblock %}
+{% block head %}<title>Yükle - Loving</title>{% endblock %}
 
 {% block content %}
 <div class="page-container">
     <div class="page-header">
-        <h1>Upload Memories</h1>
-        <p>Add new photos & videos to our collection</p>
+        <h1>Anı Yükle</h1>
+        <p>Koleksiyonumuza yeni fotoğraf ve videolar ekle</p>
     </div>
 
     <div class="upload-card">
@@ -13,45 +13,45 @@
             <!-- Drop zone -->
             <div class="drop-zone" id="dropZone">
                 <div class="drop-icon">📸</div>
-                <p>Drag & drop photos/videos here</p>
-                <p class="drop-hint">or click to browse</p>
+                <p>Fotoğraf/videoları buraya sürükle bırak</p>
+                <p class="drop-hint">veya tıklayarak seç</p>
                 <input type="file" name="files" id="fileInput" multiple accept="image/*,video/*" hidden>
             </div>
             <div class="file-preview" id="filePreview"></div>
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Title (optional - defaults to filename)</label>
-                    <input type="text" name="title" placeholder="Our sunset picnic...">
+                    <label>Başlık (isteğe bağlı)</label>
+                    <input type="text" name="title" placeholder="Gün batımı pikniğimiz...">
                 </div>
                 <div class="form-row">
-                    <label>Caption</label>
-                    <input type="text" name="caption" placeholder="A short description...">
+                    <label>Açıklama</label>
+                    <input type="text" name="caption" placeholder="Kısa bir açıklama...">
                 </div>
                 <div class="form-row">
-                    <label>Date of Memory</label>
+                    <label>Anı Tarihi</label>
                     <input type="date" name="memory_date">
                 </div>
                 <div class="form-row">
-                    <label>Album</label>
+                    <label>Albüm</label>
                     <select name="category_id" id="categorySelect">
-                        <option value="">-- Select Album --</option>
+                        <option value="">-- Albüm Seç --</option>
                         {% for cat in categories %}
                         <option value="{{ cat.id }}">{{ cat.emoji }} {{ cat.name }}</option>
                         {% endfor %}
                     </select>
-                    <button type="button" class="btn-small" onclick="showNewCategory()">+ New Album</button>
+                    <button type="button" class="btn-small" onclick="showNewCategory()">+ Yeni Albüm</button>
                 </div>
                 <div class="form-row" id="newCategoryRow" style="display:none">
-                    <label>New Album Name</label>
+                    <label>Yeni Albüm Adı</label>
                     <div class="inline-form">
-                        <input type="text" id="newCatName" placeholder="Album name">
+                        <input type="text" id="newCatName" placeholder="Albüm adı">
                         <input type="text" id="newCatEmoji" placeholder="Emoji" maxlength="4" style="width:60px">
-                        <button type="button" class="btn-small" onclick="addCategory()">Add</button>
+                        <button type="button" class="btn-small" onclick="addCategory()">Ekle</button>
                     </div>
                 </div>
                 <div class="form-row">
-                    <label>Uploaded by</label>
+                    <label>Yükleyen</label>
                     <div class="radio-group">
                         <label class="radio-label">
                             <input type="radio" name="uploaded_by" value="{{ partner1 }}">
@@ -67,10 +67,10 @@
 
             <div class="upload-progress" id="uploadProgress" style="display:none">
                 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                <span id="progressText">Uploading...</span>
+                <span id="progressText">Yükleniyor...</span>
             </div>
 
-            <button type="submit" class="btn-primary btn-large">Upload Memories</button>
+            <button type="submit" class="btn-primary btn-large">Anıları Yükle</button>
         </form>
     </div>
 </div>
@@ -156,7 +156,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
         if (e.lengthComputable) {
             const pct = Math.round((e.loaded / e.total) * 100);
             progressFill.style.width = pct + '%';
-            progressText.textContent = `Uploading... ${pct}%`;
+            progressText.textContent = `Yükleniyor... ${pct}%`;
         }
     });
 

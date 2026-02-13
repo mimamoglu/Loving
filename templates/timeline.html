@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block head %}<title>Our Timeline - Loving</title>{% endblock %}
+{% block head %}<title>Zaman Tüneli - Loving</title>{% endblock %}
 
 {% block content %}
 <div class="page-container">
     <div class="page-header">
-        <h1>Our Timeline</h1>
-        <p>Every moment we've shared</p>
+        <h1>Zaman Tüneli</h1>
+        <p>Paylaştığımız her an</p>
     </div>
 
     {% if memories %}
@@ -22,7 +22,7 @@
                 {% set ns.current_month = month_key %}
                 <div class="timeline-month">
                     {% if month_key == 'undated' %}
-                        Undated Memories
+                        Tarihsiz Anılar
                     {% else %}
                         {{ memory.memory_date|datefmt }}
                     {% endif %}
@@ -62,8 +62,8 @@
                             {% endif %}
                         </div>
                         <form method="POST" action="{{ url_for('delete_memory', memory_id=memory.id) }}"
-                              class="delete-form" onsubmit="return confirm('Delete this memory?')">
-                            <button type="submit" class="btn-delete" title="Delete">&#10005;</button>
+                              class="delete-form" onsubmit="return confirm('Bu anıyı silmek istediğine emin misin?')">
+                            <button type="submit" class="btn-delete" title="Sil">&#10005;</button>
                         </form>
                     </div>
                 </div>
@@ -73,9 +73,9 @@
     {% else %}
     <div class="empty-state">
         <div class="empty-icon">📸</div>
-        <h2>No memories yet</h2>
-        <p>Start uploading your photos and videos!</p>
-        <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ Upload First Memory</a>
+        <h2>Henüz anı yok</h2>
+        <p>Fotoğraf ve videolarınızı yüklemeye başlayın!</p>
+        <a href="{{ url_for('upload') }}" class="landing-btn btn-upload">+ İlk Anıyı Yükle</a>
     </div>
     {% endif %}
 </div>
