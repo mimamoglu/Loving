@@ -22,6 +22,7 @@ from database import get_db, init_db
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_CONTENT_LENGTH
+app.permanent_session_lifetime = 86400 * 30  # 30 days
 
 os.makedirs(config.UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(os.path.join(config.UPLOAD_FOLDER, "thumbnails"), exist_ok=True)
